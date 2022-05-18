@@ -1,7 +1,9 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import NavBar from "./Components/navBar";
 import Counters from "./Components/counters";
+import { UserContextProvider } from "./Contexts/userContext";
+import { ArrContextProvider } from "./Contexts/arrContext";
 
 function App() {
   const [counters, setCounters] = useState([
@@ -10,6 +12,7 @@ function App() {
     { id: 3, value: 11 },
     { id: 4, value: 0 },
   ]);
+  // const [user, setUser] = useState("dk");\
 
   const handleDelete = (counterId) => {
     const result = counters.filter((counter) => counter.id !== counterId);
@@ -49,19 +52,21 @@ function App() {
   };
 
   return (
-    <>
-      <NavBar totalCounters={counters.filter((c) => c.value > 0).length} />
-      <main className="container">
-        <Counters
-          onReset={handleReset}
-          onIncrement={handleIncrement}
-          onDelete={handleDelete}
-          onDecrement={handleDecrement}
-          counter={counters}
-          totalCounters={counters.length}
-        />
-      </main>
-    </>
+    <UserContextProvider>
+      <ArrContextProvider>
+        <NavBar totalCounters={counters.filter((c) => c.value > 0).length} />
+        <main className="container">
+          <Counters
+            onReset={handleReset}
+            onIncrement={handleIncrement}
+            onDelete={handleDelete}
+            onDecrement={handleDecrement}
+            counter={counters}
+            totalCounters={counters.length}
+          />
+        </main>
+      </ArrContextProvider>
+    </UserContextProvider>
   );
 }
 
